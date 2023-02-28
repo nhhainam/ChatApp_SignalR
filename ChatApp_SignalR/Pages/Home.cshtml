@@ -1,0 +1,87 @@
+﻿@page
+@using ChatApp_SignalR.Entity
+@model ChatApp_SignalR.Pages.HomeModel
+@{
+    var groups = (List<Group>)ViewData["groups"];
+    var user = (User)ViewData["user"];
+    List<User> users = (List<User>)ViewData["users"];
+}
+
+
+@if (user == null)
+{
+    <div>
+        <a href="/Index">Back to Register</a>
+        <div>
+            <h3>Login</h3>
+            <form style="width: 300px" method="post">
+                <div class="mb-6">
+                    <label for="exampleInputEmail1" class="form-label">Username</label>
+                    <input id="username" type="text" name="username" class="form-control">
+                </div>
+                <div class="mb-6">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+                <input type="submit" class="btn btn-success" value="Login" />
+            </form>
+        </div>
+    </div>
+
+}
+else
+{
+    <h1>Have a good day, @user.Username</h1>
+    <table style="width: 100%">
+        <tr style="vertical-align: top;">
+            <td style="width: 40%; border-right: 1px solid black;">
+                <h1 style="color:darkcyan"> Your Group</h1>
+                <table>
+                    @foreach (var c in groups)
+                    {
+                        <tr>
+                            <td>
+                                <div style="background: aqua" class="card-header">
+                                    <a style="text-decoration: none" asp-area="" asp-page="/Chat" asp-route-groupid="@c.GroupId" asp-route-username="@user.Username">@c.GroupName</a>
+                                    <input type="hidden" id="groupHome" value="@groups.LastOrDefault()" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                    </table>
+            </td>
+
+            <td style="padding-left: 5%">
+                <h1 style="color:green"> Create Group</h1>
+                <form asp-page-handler="Group" method="post">
+                    <input id="username" type="hidden" name="username" value="@user.Username" />
+                    <input id="password" type="hidden" name="password" value="@user.Password" />
+                    <table>
+                        <tr>
+                            <td>Users </td>
+                            <td>
+                                @foreach (var u in users)
+                                {
+                                    <input id="userid" type="checkbox" name="userid" value="@u.UserId">
+                                    <label>@u.Username</label>
+                                }
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>GroupName</td>
+                            <td>
+                                <input id="groupname" type="text" name="groupname" />
+                                <input type="submit" class="btn-success" value="Create" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        </tr>
+    </table>
+}
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+@*imported script site.js in _Layout.cshtml*@

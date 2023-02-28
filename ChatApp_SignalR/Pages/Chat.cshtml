@@ -1,0 +1,49 @@
+﻿@page
+@model ChatApp_SignalR.Pages.ChatModel
+@using Entity
+@{
+    var username = ViewData["username"];
+    Group group = (Group)ViewData["group"];
+    List<Message> messages = (List<Message>)ViewData["messages"];
+}
+
+
+<table style="width: 100%">
+    <tr style="vertical-align: top;">
+        <td style="width: 20%">
+            <div>
+                <input type="button" id="setName" value="Start Chat" />
+                <div>You are:</div>
+                <input readonly type="text" id="myUserName" value="@username" />
+            </div>
+
+            <div>
+                <div>Send to</div>
+                <input type="hidden" id="group" value="@group.GroupId" />
+                <input readonly type="text" id="groupname" value="@group.GroupName" />
+            </div>
+
+        </td>
+
+        <td>
+            <div>
+                <ul id="messageList">
+                    @foreach (var x in messages)
+                    {
+                        <li> @x.User.Username just chat:  @x.Content </li>
+                    }
+                </ul>
+            </div>
+            <br />
+
+                <div>
+                    Content
+                </div>
+                <input placeholder="Type your message here.." type="text" id="messageInput" />
+                <input type="button" id="sendButton" value="Send Message" />
+        </td>
+    </tr>
+</table>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+@*imported script site.js in _Layout.cshtml*@
